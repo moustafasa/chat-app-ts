@@ -1,0 +1,51 @@
+.chat-cont {
+  margin-block: 2rem;
+  min-height: calc(100vh - 4rem);
+}
+
+.msg-box {
+  width: 40%;
+  &.me {
+    padding-left: 1rem;
+    .msg-header {
+      background-color: var(--bs-primary);
+      &::before {
+        left: 0;
+        translate: -100%;
+        border-color: transparent var(--bs-primary) transparent transparent;
+      }
+    }
+  }
+  &:not(.me) {
+    padding-right: 1rem;
+    align-self: end;
+    .msg-header {
+      background-color: var(--bs-success);
+      &::before {
+        right: 0;
+        translate: 100%;
+        border-color: transparent transparent transparent var(--bs-success);
+      }
+    }
+  }
+  @media (max-width: 767px) {
+    width: 100%;
+  }
+  .msg-header {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      border: 0.5rem solid;
+      top: 4px;
+    }
+  }
+  .img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+input::placeholder {
+  text-transform: capitalize;
+}
