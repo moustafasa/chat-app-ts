@@ -13,6 +13,7 @@ wss = new WebSocket.Server({ port: 3002 });
 const rooms = {};
 
 wss.on("connection", (ws, req, client) => {
+  console.log(req);
   ws.on("message", (message) => {
     const msg = JSON.parse(message.toString());
     const { type, room, name, msg: data } = msg;
