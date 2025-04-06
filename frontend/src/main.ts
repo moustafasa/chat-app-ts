@@ -1,7 +1,4 @@
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "./font-awesome/css/all.min.css";
 import "./font-awesome/js/all.min.js";
-// import "./main.css";
 
 type wsMsg = {
   type: string;
@@ -19,7 +16,7 @@ const joinForm = <HTMLFormElement>document.querySelector(".form-join");
 const msgQueue: wsMsg[] = [];
 
 function connect() {
-  ws = new WebSocket("ws://localhost:3002");
+  ws = new WebSocket("ws://localhost:3001/chat");
 
   ws.onopen = () => {
     sendButton.disabled = false;
@@ -37,7 +34,6 @@ function connect() {
 
   ws.onmessage = (e) => {
     const message = JSON.parse(e.data);
-    console.log(message);
     if (message.type === "message")
       createMsgBox({
         name: message.name,
@@ -106,6 +102,7 @@ function enterRoom(e?: SubmitEvent): void {
   const name = joinForm.username.value;
   const room = joinForm.room.value;
   if (name && room) {
+    chatBox.innerHTML = "";
     sendMessage({ type: "join", room, name });
   }
 }

@@ -1,19 +1,15 @@
-const jsonServer = require("json-server");
 const WebSocket = require("ws");
-const server = jsonServer.create();
-const middlewares = jsonServer.defaults();
+const express = require("express");
+const server = express();
+const http = require("http").createServer(server);
+
 const port = process.env.PORT || 3001;
 
-server.use(middlewares);
-// A middleware to hash the password before saving a new user
-server.use(jsonServer.bodyParser);
-
-wss = new WebSocket.Server({ port: 3002 });
+wss = new WebSocket.Server({ noServer: true, path: "/chat" });
 
 const rooms = {};
 
 wss.on("connection", (ws, req, client) => {
-  console.log(req);
   ws.on("message", (message) => {
     const msg = JSON.parse(message.toString());
     const { type, room, name, msg: data } = msg;
@@ -107,7 +103,14 @@ wss.on("connection", (ws, req, client) => {
   });
 });
 
-server.listen(
+http.on("upgrade", (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    // Emit the connection event
+    wss.emit("connection", ws, request);
+  });
+});
+
+http.listen(
   port,
   setTimeout(() => {
     console.log("server is running in " + port);
